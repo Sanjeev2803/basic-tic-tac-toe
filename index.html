@@ -11,17 +11,12 @@
         html, body { width: 100%; min-height: 100vh; min-height: 100dvh; }
         body {
             font-family: 'Cinzel', serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
             background: #1a0f0a;
             background-image:
                 radial-gradient(ellipse at 20% 50%, rgba(139,69,19,0.15) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 50%, rgba(139,69,19,0.1) 0%, transparent 50%);
-            color: #d4a558;
-            overflow-x: hidden;
-            overflow-y: auto;
-            padding: 20px 12px;
+            color: #d4a558; overflow-x: hidden; overflow-y: auto; padding: 20px 12px;
         }
         .embers { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
         .ember { position: absolute; border-radius: 50%; animation: emberRise linear infinite; }
@@ -37,15 +32,12 @@
         }
         .banner { position: relative; padding: 12px 40px; margin-bottom: 4px; }
         .banner h1 {
-            font-family: 'MedievalSharp', cursive;
-            font-size: clamp(2rem, 7vw, 3rem);
-            color: #f0c65a;
-            text-shadow: 0 0 20px rgba(240,198,90,0.4), 0 2px 4px rgba(0,0,0,0.8);
+            font-family: 'MedievalSharp', cursive; font-size: clamp(2rem, 7vw, 3rem);
+            color: #f0c65a; text-shadow: 0 0 20px rgba(240,198,90,0.4), 0 2px 4px rgba(0,0,0,0.8);
             letter-spacing: 3px;
         }
         .banner .subtitle {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(0.65rem, 2vw, 0.8rem);
+            font-family: 'Cinzel', serif; font-size: clamp(0.65rem, 2vw, 0.8rem);
             color: #8b7355; letter-spacing: 6px; text-transform: uppercase; margin-top: 2px;
         }
         .divider {
@@ -55,25 +47,21 @@
         }
         .controls {
             background: linear-gradient(180deg, rgba(30,18,10,0.95), rgba(45,28,15,0.9));
-            border: 1px solid #5a3a1a; border-radius: 12px;
-            padding: 14px 16px; width: 100%;
+            border: 1px solid #5a3a1a; border-radius: 12px; padding: 14px 16px; width: 100%;
             display: flex; flex-direction: column; gap: 10px;
             box-shadow: inset 0 1px 0 rgba(240,198,90,0.1), 0 4px 20px rgba(0,0,0,0.5);
         }
         .control-row {
-            display: flex; justify-content: center; align-items: center;
-            gap: 10px; flex-wrap: wrap;
+            display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap;
         }
         .toggle-group {
-            display: flex; gap: 2px;
-            background: rgba(0,0,0,0.4); border: 1px solid #3a2510;
-            border-radius: 8px; padding: 3px;
+            display: flex; gap: 2px; background: rgba(0,0,0,0.4);
+            border: 1px solid #3a2510; border-radius: 8px; padding: 3px;
         }
         .toggle-btn {
-            padding: 6px 14px; border: none; border-radius: 6px;
-            cursor: pointer; background: transparent; color: #6b5a40;
-            font-family: 'Cinzel', serif; font-size: 0.75rem;
-            font-weight: 700; transition: all 0.3s; white-space: nowrap;
+            padding: 6px 14px; border: none; border-radius: 6px; cursor: pointer;
+            background: transparent; color: #6b5a40; font-family: 'Cinzel', serif;
+            font-size: 0.75rem; font-weight: 700; transition: all 0.3s; white-space: nowrap;
         }
         .toggle-btn.active {
             background: linear-gradient(180deg, #8b6914, #6b4f10);
@@ -86,66 +74,117 @@
             border-radius: 6px; cursor: pointer; background: transparent; padding: 1px;
         }
 
-        /* Online duel panel */
-        .online-panel {
+        /* Panels */
+        .panel {
             background: linear-gradient(180deg, rgba(30,18,10,0.95), rgba(45,28,15,0.9));
-            border: 1px solid #5a3a1a; border-radius: 12px;
-            padding: 14px 16px; width: 100%;
+            border: 1px solid #5a3a1a; border-radius: 12px; padding: 14px 16px; width: 100%;
             display: none; flex-direction: column; gap: 10px; align-items: center;
             box-shadow: inset 0 1px 0 rgba(240,198,90,0.1), 0 4px 20px rgba(0,0,0,0.5);
         }
-        .online-panel.show { display: flex; }
-        .online-panel .label {
-            font-family: 'MedievalSharp', cursive;
-            font-size: 1rem; color: #f0c65a;
+        .panel.show { display: flex; }
+        .panel .label { font-family: 'MedievalSharp', cursive; font-size: 1rem; color: #f0c65a; }
+        .panel input[type="text"] {
+            background: rgba(0,0,0,0.5); border: 1px solid #5a3a1a; border-radius: 6px;
+            padding: 8px 14px; color: #f0c65a; font-family: 'Cinzel', serif; font-size: 0.9rem;
+            text-align: center; width: 220px; letter-spacing: 2px; outline: none;
         }
-        .online-panel input {
-            background: rgba(0,0,0,0.5); border: 1px solid #5a3a1a;
-            border-radius: 6px; padding: 8px 14px; color: #f0c65a;
-            font-family: 'Cinzel', serif; font-size: 0.9rem;
-            text-align: center; width: 220px; letter-spacing: 3px;
-        }
-        .online-panel input::placeholder { color: #5a4a30; }
-        .online-panel .code-display {
-            font-family: 'MedievalSharp', cursive;
-            font-size: 1.6rem; color: #f0c65a; letter-spacing: 6px;
-            padding: 8px 20px;
+        .panel input[type="text"]::placeholder { color: #5a4a30; }
+        .panel input[type="text"]:focus { border-color: #8b6914; }
+        .code-display {
+            font-family: 'MedievalSharp', cursive; font-size: 1.6rem; color: #f0c65a;
+            letter-spacing: 6px; padding: 8px 20px;
             background: rgba(0,0,0,0.4); border: 1px solid #8b6914;
-            border-radius: 8px; cursor: pointer;
-            transition: all 0.3s;
+            border-radius: 8px; cursor: pointer; transition: all 0.3s;
         }
-        .online-panel .code-display:hover {
-            box-shadow: 0 0 15px rgba(240,198,90,0.2);
+        .code-display:hover { box-shadow: 0 0 15px rgba(240,198,90,0.2); }
+        .hint { font-size: 0.7rem; color: #6b5a40; font-style: italic; }
+        .medieval-btn {
+            padding: 8px 20px; border: 1px solid #8b6914; border-radius: 6px; cursor: pointer;
+            background: linear-gradient(180deg, #5a3a1a, #3a2510); color: #f0c65a;
+            font-family: 'Cinzel', serif; font-size: 0.8rem; font-weight: 700;
+            transition: all 0.3s; letter-spacing: 1px;
         }
-        .online-panel .hint {
-            font-size: 0.7rem; color: #6b5a40; font-style: italic;
-        }
-        .online-btn {
-            padding: 8px 20px; border: 1px solid #8b6914; border-radius: 6px;
-            cursor: pointer; background: linear-gradient(180deg, #5a3a1a, #3a2510);
-            color: #f0c65a; font-family: 'Cinzel', serif; font-size: 0.8rem;
-            font-weight: 700; transition: all 0.3s; letter-spacing: 1px;
-        }
-        .online-btn:hover { background: linear-gradient(180deg, #6b4520, #4a3018); border-color: #f0c65a; }
-        .online-btn:disabled { opacity: 0.4; cursor: default; }
+        .medieval-btn:hover { background: linear-gradient(180deg, #6b4520, #4a3018); border-color: #f0c65a; }
+        .medieval-btn:disabled { opacity: 0.4; cursor: default; }
         .connected-badge {
             display: inline-block; padding: 4px 12px;
             background: rgba(46,125,50,0.3); border: 1px solid #4caf50;
-            border-radius: 20px; color: #81c784; font-size: 0.75rem;
-            letter-spacing: 1px;
+            border-radius: 20px; color: #81c784; font-size: 0.75rem; letter-spacing: 1px;
+        }
+
+        /* Player names bar */
+        .players-bar {
+            display: none; justify-content: center; gap: 20px; align-items: center;
+            font-size: 0.85rem; width: 100%;
+        }
+        .players-bar.show { display: flex; }
+        .players-bar .player {
+            display: flex; align-items: center; gap: 6px;
+            padding: 4px 12px; border-radius: 8px;
+            background: rgba(0,0,0,0.3); border: 1px solid #3a2510;
+        }
+        .players-bar .player.active-player {
+            border-color: #f0c65a; box-shadow: 0 0 10px rgba(240,198,90,0.2);
+        }
+        .players-bar .vs { color: #6b5a40; font-family: 'MedievalSharp', cursive; font-size: 1rem; }
+
+        /* Coin toss overlay */
+        .coin-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 5, 3, 0.92); z-index: 200;
+            display: none; justify-content: center; align-items: center;
+            flex-direction: column; gap: 20px;
+        }
+        .coin-overlay.show { display: flex; }
+        .coin-container { perspective: 600px; }
+        .coin {
+            width: 120px; height: 120px; position: relative;
+            transform-style: preserve-3d; transition: transform 0.1s;
+        }
+        .coin.flipping { animation: coinFlip 2.5s ease-out forwards; }
+        @keyframes coinFlip {
+            0% { transform: rotateX(0deg) translateY(0); }
+            15% { transform: rotateX(720deg) translateY(-150px); }
+            30% { transform: rotateX(1440deg) translateY(-200px); }
+            50% { transform: rotateX(2160deg) translateY(-120px); }
+            70% { transform: rotateX(2880deg) translateY(-40px); }
+            85% { transform: rotateX(3240deg) translateY(0px); }
+            100% { transform: rotateX(var(--final-rotation)) translateY(0); }
+        }
+        .coin-face {
+            position: absolute; width: 100%; height: 100%; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem; backface-visibility: hidden;
+            box-shadow: 0 0 30px rgba(240,198,90,0.3), inset 0 0 20px rgba(0,0,0,0.3);
+        }
+        .coin-front {
+            background: radial-gradient(circle at 40% 40%, #f0c65a, #8b6914);
+            border: 4px solid #d4a558;
+        }
+        .coin-back {
+            background: radial-gradient(circle at 40% 40%, #c0c0c0, #707070);
+            border: 4px solid #a0a0a0;
+            transform: rotateX(180deg);
+        }
+        .coin-result {
+            font-family: 'MedievalSharp', cursive; font-size: 1.5rem; color: #f0c65a;
+            text-shadow: 0 0 20px rgba(240,198,90,0.5);
+            opacity: 0; transition: opacity 0.5s;
+        }
+        .coin-result.show { opacity: 1; }
+        .coin-label {
+            font-family: 'MedievalSharp', cursive; font-size: 1.2rem; color: #8b7355;
         }
 
         .scoreboard {
-            display: flex; justify-content: center;
-            gap: clamp(24px, 8vw, 50px);
+            display: flex; justify-content: center; gap: clamp(24px, 8vw, 50px);
             font-size: clamp(0.85rem, 2.8vw, 1rem); color: #8b7355;
         }
         .scoreboard .player-score { display: flex; flex-direction: column; align-items: center; }
         .scoreboard .score-icon { font-size: 1.4rem; }
         .scoreboard .score-val { font-weight: 900; font-size: 1.3rem; }
         .status {
-            font-family: 'MedievalSharp', cursive;
-            font-size: clamp(1.1rem, 4vw, 1.5rem);
+            font-family: 'MedievalSharp', cursive; font-size: clamp(1.1rem, 4vw, 1.5rem);
             min-height: 2rem; transition: color 0.3s;
             text-shadow: 0 0 15px rgba(240,198,90,0.3);
         }
@@ -157,8 +196,7 @@
         }
         .board {
             --cell-size: min(105px, calc((100vw - 100px) / 3));
-            display: grid;
-            grid-template-columns: repeat(3, var(--cell-size));
+            display: grid; grid-template-columns: repeat(3, var(--cell-size));
             grid-template-rows: repeat(3, var(--cell-size));
             gap: clamp(6px, 1.5vw, 10px); justify-content: center;
         }
@@ -166,8 +204,8 @@
             width: var(--cell-size); height: var(--cell-size);
             background: linear-gradient(145deg, #2a1a0d, #1e120a);
             border: 2px solid #4a2e15; border-radius: 10px;
-            font-size: clamp(2.2rem, 8vw, 3.4rem);
-            cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: clamp(2.2rem, 8vw, 3.4rem); cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex; align-items: center; justify-content: center;
             position: relative; overflow: hidden; user-select: none;
             box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
@@ -185,8 +223,7 @@
         }
         .cell.disabled { cursor: default; pointer-events: none; }
         .cell .mark {
-            display: inline-block;
-            animation: swordStrike 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-block; animation: swordStrike 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             filter: drop-shadow(0 0 8px var(--mark-color));
         }
         @keyframes swordStrike {
@@ -195,26 +232,14 @@
             70% { transform: scale(0.9) rotate(-5deg); }
             100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
-        .ripple {
-            position: absolute; border-radius: 50%;
-            animation: rippleAnim 0.6s ease-out forwards; pointer-events: none;
-        }
-        @keyframes rippleAnim {
-            0% { transform: scale(0); opacity: 0.5; }
-            100% { transform: scale(4); opacity: 0; }
-        }
-        .cell.win {
-            animation: winGlow 0.8s ease-in-out infinite alternate;
-            border-color: var(--glow-color, #f0c65a) !important;
-        }
+        .ripple { position: absolute; border-radius: 50%; animation: rippleAnim 0.6s ease-out forwards; pointer-events: none; }
+        @keyframes rippleAnim { 0% { transform: scale(0); opacity: 0.5; } 100% { transform: scale(4); opacity: 0; } }
+        .cell.win { animation: winGlow 0.8s ease-in-out infinite alternate; border-color: var(--glow-color, #f0c65a) !important; }
         @keyframes winGlow {
             0% { transform: scale(1); box-shadow: inset 0 2px 8px rgba(0,0,0,0.5), 0 0 20px var(--glow-color, #f0c65a); }
             100% { transform: scale(1.08); box-shadow: inset 0 2px 8px rgba(0,0,0,0.5), 0 0 40px var(--glow-color, #f0c65a), 0 0 60px var(--glow-color, #f0c65a); }
         }
-        .confetti {
-            position: fixed; top: -10px;
-            animation: confettiFall linear forwards; z-index: 100; pointer-events: none;
-        }
+        .confetti { position: fixed; top: -10px; animation: confettiFall linear forwards; z-index: 100; pointer-events: none; }
         @keyframes confettiFall {
             0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
             100% { transform: translateY(100vh) rotate(1080deg) scale(0.5); opacity: 0; }
@@ -222,10 +247,9 @@
         .btn {
             padding: clamp(10px, 2.5vw, 14px) clamp(28px, 8vw, 44px);
             font-family: 'Cinzel', serif; font-size: clamp(0.85rem, 2.8vw, 1rem);
-            font-weight: 700; border: 2px solid #8b6914; border-radius: 8px;
-            cursor: pointer; background: linear-gradient(180deg, #5a3a1a, #3a2510);
-            color: #f0c65a; transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4), inset 0 1px 0 rgba(240,198,90,0.2);
+            font-weight: 700; border: 2px solid #8b6914; border-radius: 8px; cursor: pointer;
+            background: linear-gradient(180deg, #5a3a1a, #3a2510); color: #f0c65a;
+            transition: all 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.4), inset 0 1px 0 rgba(240,198,90,0.2);
             letter-spacing: 2px; text-transform: uppercase; margin-top: 4px;
         }
         .btn:hover {
@@ -237,16 +261,11 @@
         .shake { animation: shake 0.5s ease-in-out; }
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-8px) rotate(-1deg); }
-            40% { transform: translateX(8px) rotate(1deg); }
-            60% { transform: translateX(-6px) rotate(-0.5deg); }
-            80% { transform: translateX(6px) rotate(0.5deg); }
+            20% { transform: translateX(-8px) rotate(-1deg); } 40% { transform: translateX(8px) rotate(1deg); }
+            60% { transform: translateX(-6px) rotate(-0.5deg); } 80% { transform: translateX(6px) rotate(0.5deg); }
         }
         .draw-shake { animation: drawShake 0.6s ease-in-out; }
-        @keyframes drawShake {
-            0%, 100% { transform: rotate(0); }
-            25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); }
-        }
+        @keyframes drawShake { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } }
         @media (max-width: 360px) {
             .board { --cell-size: calc((100vw - 90px) / 3); }
             .toggle-btn { padding: 5px 10px; font-size: 0.7rem; }
@@ -257,6 +276,19 @@
 </head>
 <body>
     <div class="embers" id="embers"></div>
+
+    <!-- Coin Toss Overlay -->
+    <div class="coin-overlay" id="coinOverlay">
+        <div class="coin-label">The Fates Decide...</div>
+        <div class="coin-container">
+            <div class="coin" id="coin">
+                <div class="coin-face coin-front">&#9876;</div>
+                <div class="coin-face coin-back">&#9781;</div>
+            </div>
+        </div>
+        <div class="coin-result" id="coinResult"></div>
+    </div>
+
     <div class="container">
         <div class="banner">
             <h1>Royal Duel</h1>
@@ -272,6 +304,7 @@
                 </div>
                 <div class="toggle-group" id="modeToggle">
                     <button class="toggle-btn active" onclick="setMode('ai')">vs Dragon</button>
+                    <button class="toggle-btn" onclick="setMode('local')">Local Duel</button>
                     <button class="toggle-btn" onclick="setMode('online')">Online Duel</button>
                 </div>
                 <div class="color-pick">
@@ -298,21 +331,57 @@
             </div>
         </div>
 
+        <!-- Local Duel Panel -->
+        <div class="panel" id="localPanel">
+            <div class="label">Enter Thy Names</div>
+            <div class="divider" style="width:60%;"></div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; align-items:center;">
+                <div style="display:flex; flex-direction:column; gap:4px; align-items:center;">
+                    <span style="font-size:0.7rem; color:#8b7355;">Warrior I</span>
+                    <input type="text" id="localNameX" placeholder="Enter name" maxlength="12">
+                </div>
+                <span style="color:#6b5a40; font-family:'MedievalSharp',cursive; font-size:1.2rem;">vs</span>
+                <div style="display:flex; flex-direction:column; gap:4px; align-items:center;">
+                    <span style="font-size:0.7rem; color:#8b7355;">Warrior II</span>
+                    <input type="text" id="localNameO" placeholder="Enter name" maxlength="12">
+                </div>
+            </div>
+            <div class="hint">The coin toss shall decide thy fates</div>
+            <button class="medieval-btn" onclick="startLocalDuel()">Begin Duel</button>
+        </div>
+
         <!-- Online Duel Panel -->
-        <div class="online-panel" id="onlinePanel">
+        <div class="panel" id="onlinePanel">
             <div class="label">Summon an Ally for Battle</div>
             <div class="divider" style="width:60%;"></div>
+            <div style="display:flex; flex-direction:column; gap:6px; align-items:center;">
+                <span style="font-size:0.7rem; color:#8b7355;">Thy Name</span>
+                <input type="text" id="onlineName" placeholder="Enter thy name" maxlength="12">
+            </div>
             <div id="onlineStatus">
-                <button class="online-btn" onclick="createRoom()" id="createBtn">Create Battle Room</button>
+                <button class="medieval-btn" onclick="createRoom()" id="createBtn">Create Battle Room</button>
                 <div style="margin:8px 0; color:#6b5a40; font-size:0.75rem;">- or -</div>
                 <div style="display:flex; gap:8px; align-items:center; justify-content:center;">
-                    <input type="text" id="joinCode" placeholder="Enter room code" maxlength="6" style="width:160px;">
-                    <button class="online-btn" onclick="joinRoom()" id="joinBtn">Join</button>
+                    <input type="text" id="joinCode" placeholder="Room code" maxlength="6" style="width:140px;">
+                    <button class="medieval-btn" onclick="joinRoom()" id="joinBtn">Join</button>
                 </div>
             </div>
             <div id="onlineConnected" style="display:none;">
-                <div class="connected-badge">Allied Knight Connected</div>
+                <div class="connected-badge" id="connectedBadge">Allied Knight Connected</div>
                 <div class="hint" style="margin-top:6px;" id="onlineRole"></div>
+            </div>
+        </div>
+
+        <!-- Player names bar -->
+        <div class="players-bar" id="playersBar">
+            <div class="player" id="playerXBar">
+                <span>&#9876;</span>
+                <span id="playerXName">Player 1</span>
+            </div>
+            <span class="vs">vs</span>
+            <div class="player" id="playerOBar">
+                <span>&#9781;</span>
+                <span id="playerOName">Player 2</span>
             </div>
         </div>
 
@@ -348,24 +417,18 @@
             const t = audioCtx.currentTime;
             if (type === 'place') {
                 const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-                osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(800, t);
-                osc.frequency.exponentialRampToValueAtTime(200, t + 0.15);
-                gain.gain.setValueAtTime(0.12, t);
-                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+                osc.connect(gain); gain.connect(audioCtx.destination); osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(800, t); osc.frequency.exponentialRampToValueAtTime(200, t + 0.15);
+                gain.gain.setValueAtTime(0.12, t); gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
                 osc.start(t); osc.stop(t + 0.2);
                 const osc2 = audioCtx.createOscillator(), g2 = audioCtx.createGain();
-                osc2.connect(g2); g2.connect(audioCtx.destination);
-                osc2.type = 'square'; osc2.frequency.setValueAtTime(150, t);
-                g2.gain.setValueAtTime(0.06, t);
-                g2.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
-                osc2.start(t); osc2.stop(t + 0.08);
+                osc2.connect(g2); g2.connect(audioCtx.destination); osc2.type = 'square';
+                osc2.frequency.setValueAtTime(150, t); g2.gain.setValueAtTime(0.06, t);
+                g2.gain.exponentialRampToValueAtTime(0.001, t + 0.08); osc2.start(t); osc2.stop(t + 0.08);
             } else if (type === 'win') {
                 [392, 523, 659, 784, 1047].forEach((freq, i) => {
                     const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-                    osc.connect(gain); gain.connect(audioCtx.destination);
-                    osc.type = 'sawtooth';
+                    osc.connect(gain); gain.connect(audioCtx.destination); osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(freq, t + i * 0.12);
                     gain.gain.setValueAtTime(0.08, t + i * 0.12);
                     gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.12 + 0.25);
@@ -373,20 +436,22 @@
                 });
             } else if (type === 'draw') {
                 const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-                osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(150, t);
-                osc.frequency.exponentialRampToValueAtTime(60, t + 0.5);
-                gain.gain.setValueAtTime(0.15, t);
-                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+                osc.connect(gain); gain.connect(audioCtx.destination); osc.type = 'sine';
+                osc.frequency.setValueAtTime(150, t); osc.frequency.exponentialRampToValueAtTime(60, t + 0.5);
+                gain.gain.setValueAtTime(0.15, t); gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
                 osc.start(t); osc.stop(t + 0.5);
             } else if (type === 'hover') {
                 const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-                osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.type = 'sine'; osc.frequency.setValueAtTime(300, t);
-                gain.gain.setValueAtTime(0.02, t);
-                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
-                osc.start(t); osc.stop(t + 0.06);
+                osc.connect(gain); gain.connect(audioCtx.destination); osc.type = 'sine';
+                osc.frequency.setValueAtTime(300, t); gain.gain.setValueAtTime(0.02, t);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06); osc.start(t); osc.stop(t + 0.06);
+            } else if (type === 'coin') {
+                // Coin spinning metallic sound
+                const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination); osc.type = 'triangle';
+                osc.frequency.setValueAtTime(2000, t); osc.frequency.exponentialRampToValueAtTime(400, t + 2);
+                gain.gain.setValueAtTime(0.08, t); gain.gain.exponentialRampToValueAtTime(0.001, t + 2.5);
+                osc.start(t); osc.stop(t + 2.5);
             }
         }
 
@@ -404,12 +469,18 @@
         let aiSide = 'O';
         let firstMove = 'human';
         let aiTimer = null;
+        let localStarted = false;
+
+        // Player names
+        let playerNames = { X: 'Sword', O: 'Shield' };
 
         // Online state
         let peer = null;
         let conn = null;
-        let onlineSide = null;   // 'X' or 'O' for this player
+        let onlineSide = null;
         let isOnlineHost = false;
+        let myName = '';
+        let opponentName = '';
 
         const SYMBOLS = { X: '\u2694', O: '\u2764' };
         const winCombos = [
@@ -432,20 +503,19 @@
 
         // --- Mode ---
         function setMode(m) {
-            // Cleanup online if switching away
-            if (mode === 'online' && m !== 'online') { cleanupOnline(); }
-
+            if (mode === 'online' && m !== 'online') cleanupOnline();
             mode = m;
+            localStarted = false;
             document.querySelectorAll('#modeToggle .toggle-btn').forEach(b => b.classList.remove('active'));
             document.querySelector(`#modeToggle .toggle-btn[onclick="setMode('${m}')"]`).classList.add('active');
 
-            const isAi = m === 'ai';
-            const isOnline = m === 'online';
-            document.getElementById('aiControls').style.display = isAi ? 'flex' : 'none';
-            document.getElementById('aiControls2').style.display = isAi ? 'flex' : 'none';
-            document.getElementById('onlinePanel').classList.toggle('show', isOnline);
+            document.getElementById('aiControls').style.display = m === 'ai' ? 'flex' : 'none';
+            document.getElementById('aiControls2').style.display = m === 'ai' ? 'flex' : 'none';
+            document.getElementById('localPanel').classList.toggle('show', m === 'local');
+            document.getElementById('onlinePanel').classList.toggle('show', m === 'online');
+            document.getElementById('playersBar').classList.remove('show');
 
-            if (isOnline) {
+            if (m === 'online') {
                 document.getElementById('onlineStatus').style.display = '';
                 document.getElementById('onlineConnected').style.display = 'none';
             }
@@ -471,7 +541,84 @@
             resetGame();
         }
 
-        // --- Online Multiplayer (PeerJS) ---
+        // --- Local Duel ---
+        function startLocalDuel() {
+            const name1 = document.getElementById('localNameX').value.trim() || 'Player 1';
+            const name2 = document.getElementById('localNameO').value.trim() || 'Player 2';
+            // Randomly assign who gets Sword (X) and who gets Shield (O)
+            if (Math.random() < 0.5) {
+                playerNames = { X: name1, O: name2 };
+            } else {
+                playerNames = { X: name2, O: name1 };
+            }
+            localStarted = true;
+            showPlayersBar();
+            // Coin toss to decide who goes first
+            doCoinToss(() => {
+                resetGame();
+            });
+        }
+
+        function showPlayersBar() {
+            document.getElementById('playerXName').textContent = playerNames.X;
+            document.getElementById('playerOName').textContent = playerNames.O;
+            document.getElementById('playersBar').classList.add('show');
+            updateActivePlayer();
+        }
+
+        function updateActivePlayer() {
+            const xBar = document.getElementById('playerXBar');
+            const oBar = document.getElementById('playerOBar');
+            xBar.classList.toggle('active-player', currentPlayer === 'X');
+            oBar.classList.toggle('active-player', currentPlayer === 'O');
+            xBar.style.borderColor = currentPlayer === 'X' ? getXColor() : '#3a2510';
+            oBar.style.borderColor = currentPlayer === 'O' ? getOColor() : '#3a2510';
+        }
+
+        // --- Coin Toss ---
+        let coinTossCallback = null;
+        let coinResult = null; // 'X' or 'O'
+
+        function doCoinToss(callback) {
+            coinTossCallback = callback;
+            const overlay = document.getElementById('coinOverlay');
+            const coinEl = document.getElementById('coin');
+            const resultEl = document.getElementById('coinResult');
+
+            // Randomly decide
+            coinResult = Math.random() < 0.5 ? 'X' : 'O';
+            const finalRotation = coinResult === 'X' ? '3600deg' : '3780deg'; // front or back up
+
+            overlay.classList.add('show');
+            resultEl.classList.remove('show');
+            resultEl.textContent = '';
+
+            coinEl.classList.remove('flipping');
+            coinEl.style.setProperty('--final-rotation', finalRotation);
+
+            playSound('coin');
+
+            // Trigger flip
+            requestAnimationFrame(() => {
+                coinEl.classList.add('flipping');
+            });
+
+            setTimeout(() => {
+                const winnerName = playerNames[coinResult] || (coinResult === 'X' ? 'Sword' : 'Shield');
+                const sideName = coinResult === 'X' ? 'Sword' : 'Shield';
+                resultEl.innerHTML = `${winnerName} strikes first!<br><span style="font-size:0.9rem; color:#8b7355;">${playerNames.X || 'Player'} wields Sword \u2694 &nbsp;|&nbsp; ${playerNames.O || 'Player'} bears Shield \u2764</span>`;
+                resultEl.classList.add('show');
+
+                setTimeout(() => {
+                    overlay.classList.remove('show');
+                    coinEl.classList.remove('flipping');
+                    currentPlayer = coinResult;
+                    if (coinTossCallback) coinTossCallback();
+                }, 2500);
+            }, 2800);
+        }
+
+        // --- Online Multiplayer ---
         function generateCode() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let code = '';
@@ -479,7 +626,19 @@
             return code;
         }
 
+        function getOnlineName() {
+            return document.getElementById('onlineName').value.trim() || 'Unknown Knight';
+        }
+
         function createRoom() {
+            myName = getOnlineName();
+            if (!myName || myName === 'Unknown Knight') {
+                document.getElementById('onlineName').style.borderColor = '#e94560';
+                document.getElementById('onlineName').focus();
+                return;
+            }
+            document.getElementById('onlineName').style.borderColor = '#5a3a1a';
+
             const code = generateCode();
             document.getElementById('createBtn').disabled = true;
             document.getElementById('createBtn').textContent = 'Summoning...';
@@ -487,7 +646,6 @@
             peer = new Peer('royalduel-' + code);
             peer.on('open', () => {
                 isOnlineHost = true;
-                onlineSide = 'X';
                 document.getElementById('onlineStatus').innerHTML = `
                     <div class="label">Thy Battle Code:</div>
                     <div class="code-display" onclick="navigator.clipboard.writeText('${code}')" title="Click to copy">${code}</div>
@@ -497,9 +655,13 @@
             });
             peer.on('connection', (c) => {
                 conn = c;
+                conn.on('open', () => {
+                    // Send my name to opponent
+                    conn.send({ type: 'name', name: myName });
+                });
                 setupConnection();
             });
-            peer.on('error', (err) => {
+            peer.on('error', () => {
                 document.getElementById('createBtn').disabled = false;
                 document.getElementById('createBtn').textContent = 'Create Battle Room';
                 statusEl.textContent = 'Summoning failed. Try again.';
@@ -507,6 +669,14 @@
         }
 
         function joinRoom() {
+            myName = getOnlineName();
+            if (!myName || myName === 'Unknown Knight') {
+                document.getElementById('onlineName').style.borderColor = '#e94560';
+                document.getElementById('onlineName').focus();
+                return;
+            }
+            document.getElementById('onlineName').style.borderColor = '#5a3a1a';
+
             const code = document.getElementById('joinCode').value.trim().toUpperCase();
             if (!code) return;
             document.getElementById('joinBtn').disabled = true;
@@ -515,9 +685,11 @@
             peer = new Peer();
             peer.on('open', () => {
                 isOnlineHost = false;
-                onlineSide = 'O';
                 conn = peer.connect('royalduel-' + code);
-                conn.on('open', () => { setupConnection(); });
+                conn.on('open', () => {
+                    conn.send({ type: 'name', name: myName });
+                    setupConnection();
+                });
                 conn.on('error', () => {
                     statusEl.textContent = 'Could not find that battle room.';
                     document.getElementById('joinBtn').disabled = false;
@@ -532,51 +704,115 @@
         }
 
         function setupConnection() {
-            document.getElementById('onlineStatus').style.display = 'none';
-            document.getElementById('onlineConnected').style.display = '';
-            document.getElementById('onlineRole').textContent =
-                `Thou art ${onlineSide === 'X' ? 'Sword (X) - First move' : 'Shield (O) - Second move'}`;
-
             conn.on('data', (data) => {
-                if (data.type === 'move') {
+                if (data.type === 'name') {
+                    opponentName = data.name;
+                    // Once both names are exchanged, host does coin toss
+                    if (isOnlineHost && opponentName) {
+                        startOnlineGame();
+                    }
+                } else if (data.type === 'coinResult') {
+                    // Guest receives coin toss result
+                    onlineSide = data.guestSide;
+                    playerNames = data.playerNames;
+                    showOnlineConnected();
+                    showPlayersBar();
+                    doCoinToss(() => {
+                        currentPlayer = data.firstPlayer;
+                        cells = Array(9).fill('');
+                        gameOver = false;
+                        updateOnlineStatus();
+                        render();
+                        updateActivePlayer();
+                    });
+                    // Override coinResult so animation matches
+                    coinResult = data.firstPlayer;
+                } else if (data.type === 'move') {
                     cells[data.index] = data.player;
                     currentPlayer = data.player;
                     playSound('place');
                     afterMove(data.index);
                 } else if (data.type === 'reset') {
-                    cells = Array(9).fill('');
-                    currentPlayer = 'X';
-                    gameOver = false;
-                    updateOnlineStatus();
-                    render();
+                    // New game coin toss from host
+                    onlineSide = data.guestSide;
+                    playerNames = data.playerNames;
+                    showPlayersBar();
+                    doCoinToss(() => {
+                        currentPlayer = data.firstPlayer;
+                        cells = Array(9).fill('');
+                        gameOver = false;
+                        updateOnlineStatus();
+                        render();
+                        updateActivePlayer();
+                    });
+                    coinResult = data.firstPlayer;
                 }
             });
             conn.on('close', () => {
                 statusEl.textContent = 'Thy ally has departed.';
                 statusEl.style.color = '#8b4513';
+                document.getElementById('playersBar').classList.remove('show');
+            });
+        }
+
+        function startOnlineGame() {
+            // Host decides coin toss
+            const firstPlayer = Math.random() < 0.5 ? 'X' : 'O';
+            // Host is always assigned randomly too
+            const hostSide = Math.random() < 0.5 ? 'X' : 'O';
+            const guestSide = hostSide === 'X' ? 'O' : 'X';
+
+            onlineSide = hostSide;
+            playerNames = {
+                [hostSide]: myName,
+                [guestSide]: opponentName
+            };
+
+            conn.send({
+                type: 'coinResult',
+                firstPlayer: firstPlayer,
+                guestSide: guestSide,
+                playerNames: playerNames
             });
 
-            cells = Array(9).fill('');
-            currentPlayer = 'X';
-            gameOver = false;
-            updateOnlineStatus();
-            render();
+            showOnlineConnected();
+            showPlayersBar();
+
+            coinResult = firstPlayer;
+            doCoinToss(() => {
+                currentPlayer = firstPlayer;
+                cells = Array(9).fill('');
+                gameOver = false;
+                updateOnlineStatus();
+                render();
+                updateActivePlayer();
+            });
+        }
+
+        function showOnlineConnected() {
+            document.getElementById('onlineStatus').style.display = 'none';
+            document.getElementById('onlineConnected').style.display = '';
+            document.getElementById('connectedBadge').textContent = `${opponentName || 'Knight'} has joined!`;
+            const sideLabel = onlineSide === 'X' ? 'Sword (X)' : 'Shield (O)';
+            document.getElementById('onlineRole').textContent = `Thou art ${sideLabel}`;
         }
 
         function cleanupOnline() {
             if (conn) { conn.close(); conn = null; }
             if (peer) { peer.destroy(); peer = null; }
-            onlineSide = null;
-            isOnlineHost = false;
+            onlineSide = null; isOnlineHost = false;
+            myName = ''; opponentName = '';
+            document.getElementById('playersBar').classList.remove('show');
         }
 
         function updateOnlineStatus() {
             if (mode !== 'online' || !conn) return;
+            const currentName = playerNames[currentPlayer] || currentPlayer;
             if (currentPlayer === onlineSide) {
-                statusEl.textContent = 'Thy turn, warrior!';
+                statusEl.textContent = `Thy turn, ${myName}!`;
                 statusEl.style.color = '#f0c65a';
             } else {
-                statusEl.textContent = 'Thy rival ponders...';
+                statusEl.textContent = `${opponentName} ponders...`;
                 statusEl.style.color = '#8b7355';
             }
         }
@@ -648,6 +884,7 @@
                 boardEl.appendChild(cell);
             });
             updateScoreColors();
+            if (mode === 'local' || mode === 'online') updateActivePlayer();
         }
 
         function createRipple(cellEl, color) {
@@ -671,11 +908,9 @@
             cells[i] = currentPlayer;
             playSound('place');
 
-            // Send move to peer
             if (mode === 'online' && conn) {
                 conn.send({ type: 'move', index: i, player: currentPlayer });
             }
-
             afterMove(i);
         }
 
@@ -692,9 +927,9 @@
                 if (mode === 'ai') {
                     label = winner === humanSide ? 'Victory is thine!' : 'The Dragon prevails!';
                 } else if (mode === 'online') {
-                    label = winner === onlineSide ? 'Victory is thine!' : 'Thy rival conquers!';
-                } else {
-                    label = `${SYMBOLS[winner]} triumphs!`;
+                    label = winner === onlineSide ? 'Victory is thine!' : `${opponentName} conquers!`;
+                } else if (mode === 'local') {
+                    label = `${playerNames[winner]} triumphs!`;
                 }
                 statusEl.textContent = label;
                 statusEl.style.color = winner === 'X' ? getXColor() : getOColor();
@@ -723,6 +958,10 @@
             if (mode === 'online') {
                 updateOnlineStatus();
                 render();
+            } else if (mode === 'local') {
+                statusEl.textContent = `${playerNames[currentPlayer]}'s turn`;
+                statusEl.style.color = currentPlayer === 'X' ? getXColor() : getOColor();
+                render();
             } else {
                 updateStatus();
                 if (mode === 'ai' && currentPlayer === aiSide && !gameOver) {
@@ -740,38 +979,36 @@
                     statusEl.textContent = 'Draw thy sword, warrior';
                     statusEl.style.color = '#f0c65a';
                 }
-            } else {
-                const symbol = SYMBOLS[currentPlayer];
-                statusEl.textContent = `${symbol} awaits thy move`;
-                statusEl.style.color = currentPlayer === 'X' ? getXColor() : getOColor();
+            } else if (mode === 'local') {
+                if (localStarted) {
+                    statusEl.textContent = `${playerNames[currentPlayer]}'s turn`;
+                    statusEl.style.color = currentPlayer === 'X' ? getXColor() : getOColor();
+                } else {
+                    statusEl.textContent = 'Enter names to begin';
+                    statusEl.style.color = '#8b7355';
+                }
             }
         }
 
-        // =================== SMARTER AI ===================
-
+        // --- AI ---
         function aiMove() {
             let move;
             if (difficulty === 'easy') {
-                // 30% smart, 70% random — but always take a win
                 const winMove = findWinOrBlock(aiSide);
                 if (winMove !== null) { move = winMove; }
                 else { move = Math.random() < 0.3 ? aiBest() : aiEasy(); }
             } else if (difficulty === 'medium') {
-                // Always win if possible, always block if opponent about to win
-                // Otherwise 85% minimax, 15% random
                 const winMove = findWinOrBlock(aiSide);
                 const blockMove = findWinOrBlock(humanSide);
                 if (winMove !== null) { move = winMove; }
                 else if (blockMove !== null) { move = blockMove; }
                 else { move = Math.random() < 0.85 ? aiBest() : aiEasy(); }
             } else {
-                // King: pure minimax — unbeatable
                 move = aiBest();
             }
             if (move !== undefined && move !== null) makeMove(move);
         }
 
-        // Check if 'side' can win in one move, return that cell index
         function findWinOrBlock(side) {
             for (const [a, b, c] of winCombos) {
                 const vals = [cells[a], cells[b], cells[c]];
@@ -788,7 +1025,6 @@
 
         function aiEasy() {
             const empty = cells.map((v, i) => v === '' ? i : -1).filter(i => i >= 0);
-            // Prefer center, then corners, then edges
             if (cells[4] === '') return 4;
             const corners = [0, 2, 6, 8].filter(i => cells[i] === '');
             if (corners.length > 0) return corners[Math.floor(Math.random() * corners.length)];
@@ -796,8 +1032,7 @@
         }
 
         function aiBest() {
-            let bestScore = -Infinity;
-            let bestMove;
+            let bestScore = -Infinity, bestMove;
             for (let i = 0; i < 9; i++) {
                 if (cells[i] !== '') continue;
                 cells[i] = aiSide;
@@ -868,43 +1103,80 @@
             aiThinking = false;
 
             if (mode === 'online') {
-                if (conn) { conn.send({ type: 'reset' }); }
-                updateOnlineStatus();
-                render();
+                if (conn && isOnlineHost) {
+                    // Host does new coin toss
+                    const firstPlayer = Math.random() < 0.5 ? 'X' : 'O';
+                    conn.send({
+                        type: 'reset',
+                        firstPlayer: firstPlayer,
+                        guestSide: onlineSide === 'X' ? 'O' : 'X', // opponent's side stays same
+                        playerNames: playerNames
+                    });
+                    coinResult = firstPlayer;
+                    doCoinToss(() => {
+                        currentPlayer = firstPlayer;
+                        cells = Array(9).fill('');
+                        gameOver = false;
+                        updateOnlineStatus();
+                        render();
+                        updateActivePlayer();
+                    });
+                } else if (!conn) {
+                    render();
+                }
+                return;
+            }
+
+            if (mode === 'local') {
+                if (localStarted) {
+                    // Re-randomize sides each new battle
+                    const names = [playerNames.X, playerNames.O];
+                    if (Math.random() < 0.5) {
+                        playerNames = { X: names[0], O: names[1] };
+                    } else {
+                        playerNames = { X: names[1], O: names[0] };
+                    }
+                    showPlayersBar();
+                    doCoinToss(() => {
+                        cells = Array(9).fill('');
+                        currentPlayer = coinResult;
+                        gameOver = false;
+                        updateStatus();
+                        render();
+                    });
+                } else {
+                    updateStatus();
+                    render();
+                }
                 return;
             }
 
             if (mode === 'ai' && firstMove === 'ai') {
                 currentPlayer = aiSide;
-                updateStatus();
-                render();
-                scheduleAiMove();
+                updateStatus(); render(); scheduleAiMove();
             } else if (mode === 'ai' && firstMove === 'human') {
                 currentPlayer = humanSide;
-                updateStatus();
-                render();
+                updateStatus(); render();
             } else {
-                updateStatus();
-                render();
+                updateStatus(); render();
             }
         }
 
         function newGame() {
-            firstMove = 'human';
-            document.querySelectorAll('#firstPanel .toggle-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector(`#firstPanel .toggle-btn[onclick="setFirstMove('human')"]`).classList.add('active');
+            if (mode === 'ai') {
+                firstMove = 'human';
+                document.querySelectorAll('#firstPanel .toggle-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector(`#firstPanel .toggle-btn[onclick="setFirstMove('human')"]`).classList.add('active');
+            }
             resetGame();
         }
 
         function scheduleAiMove() {
             aiThinking = true;
-            updateStatus();
-            render();
+            updateStatus(); render();
             const delay = Math.floor(Math.random() * 1000) + 2000;
             aiTimer = setTimeout(() => {
-                aiTimer = null;
-                aiThinking = false;
-                aiMove();
+                aiTimer = null; aiThinking = false; aiMove();
             }, delay);
         }
 
