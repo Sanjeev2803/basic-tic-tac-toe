@@ -3,263 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Tic Tac Toe</title>
+    <title>Royal Duel - Medieval Tic Tac Toe</title>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body {
-            width: 100%;
-            min-height: 100vh;
-            min-height: 100dvh;
-        }
+        html, body { width: 100%; min-height: 100vh; min-height: 100dvh; }
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Cinzel', serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #0f0f1a;
-            color: #eee;
+            background: #1a0f0a;
+            background-image:
+                radial-gradient(ellipse at 20% 50%, rgba(139,69,19,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(139,69,19,0.1) 0%, transparent 50%);
+            color: #d4a558;
             overflow-x: hidden;
             overflow-y: auto;
             padding: 20px 12px;
         }
+        .embers { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .ember { position: absolute; border-radius: 50%; animation: emberRise linear infinite; }
+        @keyframes emberRise {
+            0% { transform: translateY(100vh) scale(1); opacity: 0; }
+            10% { opacity: 0.8; } 50% { opacity: 0.5; }
+            100% { transform: translateY(-10vh) scale(0); opacity: 0; }
+        }
         .container {
-            text-align: center;
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 480px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
+            text-align: center; position: relative; z-index: 1;
+            width: 100%; max-width: 520px;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
         }
-        h1 {
-            font-size: clamp(1.8rem, 6vw, 2.8rem);
-            background: linear-gradient(135deg, #e94560, #0ea5e9);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: none;
+        .banner { position: relative; padding: 12px 40px; margin-bottom: 4px; }
+        .banner h1 {
+            font-family: 'MedievalSharp', cursive;
+            font-size: clamp(2rem, 7vw, 3rem);
+            color: #f0c65a;
+            text-shadow: 0 0 20px rgba(240,198,90,0.4), 0 2px 4px rgba(0,0,0,0.8);
+            letter-spacing: 3px;
         }
-
-        /* Particle background */
-        .particles {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 0;
+        .banner .subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(0.65rem, 2vw, 0.8rem);
+            color: #8b7355; letter-spacing: 6px; text-transform: uppercase; margin-top: 2px;
         }
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: float linear infinite;
+        .divider {
+            width: 80%; max-width: 300px; height: 2px;
+            background: linear-gradient(90deg, transparent, #8b6914, #f0c65a, #8b6914, transparent);
+            margin: 2px auto;
         }
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.3; }
-            90% { opacity: 0.3; }
-            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+        .controls {
+            background: linear-gradient(180deg, rgba(30,18,10,0.95), rgba(45,28,15,0.9));
+            border: 1px solid #5a3a1a; border-radius: 12px;
+            padding: 14px 16px; width: 100%;
+            display: flex; flex-direction: column; gap: 10px;
+            box-shadow: inset 0 1px 0 rgba(240,198,90,0.1), 0 4px 20px rgba(0,0,0,0.5);
         }
-
-        /* Settings panel */
-        .settings {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            align-items: center;
-            width: 100%;
+        .control-row {
+            display: flex; justify-content: center; align-items: center;
+            gap: 10px; flex-wrap: wrap;
         }
-        .color-pick {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.9rem;
+        .toggle-group {
+            display: flex; gap: 2px;
+            background: rgba(0,0,0,0.4); border: 1px solid #3a2510;
+            border-radius: 8px; padding: 3px;
         }
+        .toggle-btn {
+            padding: 6px 14px; border: none; border-radius: 6px;
+            cursor: pointer; background: transparent; color: #6b5a40;
+            font-family: 'Cinzel', serif; font-size: 0.75rem;
+            font-weight: 700; transition: all 0.3s; white-space: nowrap;
+        }
+        .toggle-btn.active {
+            background: linear-gradient(180deg, #8b6914, #6b4f10);
+            color: #f0c65a; box-shadow: 0 0 10px rgba(240,198,90,0.2);
+        }
+        .toggle-btn:hover:not(.active) { color: #a08050; }
+        .color-pick { display: flex; align-items: center; gap: 5px; font-size: 0.75rem; color: #8b7355; }
         .color-pick input[type="color"] {
-            width: 32px; height: 32px;
-            border: 2px solid #333;
-            border-radius: 8px;
-            cursor: pointer;
-            background: transparent;
-            padding: 2px;
-        }
-        .mode-toggle {
-            display: flex;
-            gap: 3px;
-            background: #1a1a2e;
-            border-radius: 8px;
-            padding: 3px;
-        }
-        .mode-btn {
-            padding: 7px 14px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            background: transparent;
-            color: #888;
-            font-size: 0.85rem;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        .mode-btn.active {
-            background: #e94560;
-            color: #fff;
-        }
-        .difficulty {
-            display: flex;
-            gap: 3px;
-            background: #1a1a2e;
-            border-radius: 8px;
-            padding: 3px;
-            justify-content: center;
-        }
-        .diff-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            background: transparent;
-            color: #888;
-            font-size: 0.8rem;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        .diff-btn.active {
-            background: #0ea5e9;
-            color: #fff;
+            width: 28px; height: 28px; border: 2px solid #5a3a1a;
+            border-radius: 6px; cursor: pointer; background: transparent; padding: 1px;
         }
 
-        .score {
-            display: flex;
-            justify-content: center;
-            gap: clamp(20px, 6vw, 40px);
-            font-size: clamp(0.95rem, 3vw, 1.2rem);
+        /* Online duel panel */
+        .online-panel {
+            background: linear-gradient(180deg, rgba(30,18,10,0.95), rgba(45,28,15,0.9));
+            border: 1px solid #5a3a1a; border-radius: 12px;
+            padding: 14px 16px; width: 100%;
+            display: none; flex-direction: column; gap: 10px; align-items: center;
+            box-shadow: inset 0 1px 0 rgba(240,198,90,0.1), 0 4px 20px rgba(0,0,0,0.5);
         }
-        .score span { font-weight: bold; }
+        .online-panel.show { display: flex; }
+        .online-panel .label {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1rem; color: #f0c65a;
+        }
+        .online-panel input {
+            background: rgba(0,0,0,0.5); border: 1px solid #5a3a1a;
+            border-radius: 6px; padding: 8px 14px; color: #f0c65a;
+            font-family: 'Cinzel', serif; font-size: 0.9rem;
+            text-align: center; width: 220px; letter-spacing: 3px;
+        }
+        .online-panel input::placeholder { color: #5a4a30; }
+        .online-panel .code-display {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.6rem; color: #f0c65a; letter-spacing: 6px;
+            padding: 8px 20px;
+            background: rgba(0,0,0,0.4); border: 1px solid #8b6914;
+            border-radius: 8px; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .online-panel .code-display:hover {
+            box-shadow: 0 0 15px rgba(240,198,90,0.2);
+        }
+        .online-panel .hint {
+            font-size: 0.7rem; color: #6b5a40; font-style: italic;
+        }
+        .online-btn {
+            padding: 8px 20px; border: 1px solid #8b6914; border-radius: 6px;
+            cursor: pointer; background: linear-gradient(180deg, #5a3a1a, #3a2510);
+            color: #f0c65a; font-family: 'Cinzel', serif; font-size: 0.8rem;
+            font-weight: 700; transition: all 0.3s; letter-spacing: 1px;
+        }
+        .online-btn:hover { background: linear-gradient(180deg, #6b4520, #4a3018); border-color: #f0c65a; }
+        .online-btn:disabled { opacity: 0.4; cursor: default; }
+        .connected-badge {
+            display: inline-block; padding: 4px 12px;
+            background: rgba(46,125,50,0.3); border: 1px solid #4caf50;
+            border-radius: 20px; color: #81c784; font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
 
+        .scoreboard {
+            display: flex; justify-content: center;
+            gap: clamp(24px, 8vw, 50px);
+            font-size: clamp(0.85rem, 2.8vw, 1rem); color: #8b7355;
+        }
+        .scoreboard .player-score { display: flex; flex-direction: column; align-items: center; }
+        .scoreboard .score-icon { font-size: 1.4rem; }
+        .scoreboard .score-val { font-weight: 900; font-size: 1.3rem; }
         .status {
-            font-size: clamp(1.1rem, 4vw, 1.4rem);
-            min-height: 1.8rem;
-            font-weight: 600;
-            transition: color 0.3s;
+            font-family: 'MedievalSharp', cursive;
+            font-size: clamp(1.1rem, 4vw, 1.5rem);
+            min-height: 2rem; transition: color 0.3s;
+            text-shadow: 0 0 15px rgba(240,198,90,0.3);
         }
-
-        /* Board — responsive cells using vmin */
         .board-wrapper {
-            position: relative;
-            display: inline-block;
+            position: relative; display: inline-block; padding: 16px;
+            background: linear-gradient(145deg, rgba(60,40,20,0.9), rgba(40,25,12,0.95));
+            border: 3px solid #5a3a1a; border-radius: 16px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.6), inset 0 0 30px rgba(0,0,0,0.4), 0 0 80px rgba(139,105,20,0.1);
         }
         .board {
-            --cell-size: min(110px, calc((100vw - 60px) / 3));
+            --cell-size: min(105px, calc((100vw - 100px) / 3));
             display: grid;
             grid-template-columns: repeat(3, var(--cell-size));
             grid-template-rows: repeat(3, var(--cell-size));
-            gap: clamp(6px, 1.5vw, 10px);
-            justify-content: center;
-            perspective: 800px;
+            gap: clamp(6px, 1.5vw, 10px); justify-content: center;
         }
         .cell {
-            width: var(--cell-size);
-            height: var(--cell-size);
-            background: linear-gradient(145deg, #1a1a2e, #16213e);
-            border: 2px solid #0f3460;
-            border-radius: clamp(10px, 2.5vw, 16px);
-            font-size: clamp(2rem, 7vw, 3.2rem);
-            font-weight: 900;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            user-select: none;
+            width: var(--cell-size); height: var(--cell-size);
+            background: linear-gradient(145deg, #2a1a0d, #1e120a);
+            border: 2px solid #4a2e15; border-radius: 10px;
+            font-size: clamp(2.2rem, 8vw, 3.4rem);
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden; user-select: none;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
         }
         .cell::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.08), transparent 60%);
-            opacity: 0;
-            transition: opacity 0.3s;
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(240,198,90,0.08), transparent 60%);
+            opacity: 0; transition: opacity 0.3s;
         }
         .cell:hover::before { opacity: 1; }
         .cell:hover {
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-            border-color: #1a4a80;
+            transform: translateY(-3px) scale(1.04);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5), 0 8px 20px rgba(0,0,0,0.5), 0 0 15px rgba(240,198,90,0.1);
+            border-color: #6b4f10;
         }
         .cell.disabled { cursor: default; pointer-events: none; }
-
-        /* Placement animation */
         .cell .mark {
             display: inline-block;
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: swordStrike 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 0 8px var(--mark-color));
         }
-        @keyframes popIn {
+        @keyframes swordStrike {
             0% { transform: scale(0) rotate(-180deg); opacity: 0; }
-            60% { transform: scale(1.3) rotate(10deg); }
+            50% { transform: scale(1.4) rotate(15deg); }
+            70% { transform: scale(0.9) rotate(-5deg); }
             100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
-
-        /* Ripple effect */
         .ripple {
-            position: absolute;
-            border-radius: 50%;
-            animation: rippleAnim 0.6s ease-out forwards;
-            pointer-events: none;
+            position: absolute; border-radius: 50%;
+            animation: rippleAnim 0.6s ease-out forwards; pointer-events: none;
         }
         @keyframes rippleAnim {
-            0% { transform: scale(0); opacity: 0.6; }
+            0% { transform: scale(0); opacity: 0.5; }
             100% { transform: scale(4); opacity: 0; }
         }
-
-        /* Win animation */
         .cell.win {
-            animation: winPulse 0.8s ease-in-out infinite alternate;
-            box-shadow: 0 0 30px var(--glow-color, #e94560);
-            border-color: var(--glow-color, #e94560);
+            animation: winGlow 0.8s ease-in-out infinite alternate;
+            border-color: var(--glow-color, #f0c65a) !important;
         }
-        @keyframes winPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.08) rotate(2deg); }
-            100% { transform: scale(1.12) rotate(-2deg); }
+        @keyframes winGlow {
+            0% { transform: scale(1); box-shadow: inset 0 2px 8px rgba(0,0,0,0.5), 0 0 20px var(--glow-color, #f0c65a); }
+            100% { transform: scale(1.08); box-shadow: inset 0 2px 8px rgba(0,0,0,0.5), 0 0 40px var(--glow-color, #f0c65a), 0 0 60px var(--glow-color, #f0c65a); }
         }
-
-        /* Confetti */
         .confetti {
-            position: fixed;
-            width: 10px; height: 10px;
-            top: -10px;
-            animation: confettiFall linear forwards;
-            z-index: 100;
-            pointer-events: none;
+            position: fixed; top: -10px;
+            animation: confettiFall linear forwards; z-index: 100; pointer-events: none;
         }
         @keyframes confettiFall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(1080deg) scale(0.5); opacity: 0; }
         }
-
         .btn {
-            padding: clamp(10px, 2.5vw, 14px) clamp(24px, 7vw, 36px);
-            font-size: clamp(0.95rem, 3vw, 1.1rem);
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            background: linear-gradient(135deg, #e94560, #c73652);
-            color: #fff;
-            font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
-            margin-top: 8px;
-            flex-shrink: 0;
+            padding: clamp(10px, 2.5vw, 14px) clamp(28px, 8vw, 44px);
+            font-family: 'Cinzel', serif; font-size: clamp(0.85rem, 2.8vw, 1rem);
+            font-weight: 700; border: 2px solid #8b6914; border-radius: 8px;
+            cursor: pointer; background: linear-gradient(180deg, #5a3a1a, #3a2510);
+            color: #f0c65a; transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4), inset 0 1px 0 rgba(240,198,90,0.2);
+            letter-spacing: 2px; text-transform: uppercase; margin-top: 4px;
         }
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(233, 69, 96, 0.5);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.5), 0 0 20px rgba(240,198,90,0.15);
+            background: linear-gradient(180deg, #6b4520, #4a3018); border-color: #f0c65a;
         }
         .btn:active { transform: translateY(0); }
-
-        /* Screen shake on win */
         .shake { animation: shake 0.5s ease-in-out; }
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
@@ -268,115 +242,151 @@
             60% { transform: translateX(-6px) rotate(-0.5deg); }
             80% { transform: translateX(6px) rotate(0.5deg); }
         }
-
-        /* Draw animation */
         .draw-shake { animation: drawShake 0.6s ease-in-out; }
         @keyframes drawShake {
             0%, 100% { transform: rotate(0); }
-            25% { transform: rotate(-3deg); }
-            75% { transform: rotate(3deg); }
+            25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); }
         }
-
-        /* Small phones */
         @media (max-width: 360px) {
-            .board { --cell-size: calc((100vw - 50px) / 3); }
-            .settings { gap: 8px; }
-            .mode-btn { padding: 6px 10px; font-size: 0.8rem; }
-            .diff-btn { padding: 5px 9px; font-size: 0.75rem; }
+            .board { --cell-size: calc((100vw - 90px) / 3); }
+            .toggle-btn { padding: 5px 10px; font-size: 0.7rem; }
+            .controls { padding: 10px 10px; }
         }
-
-        /* Tablets and larger */
-        @media (min-width: 768px) {
-            .board { --cell-size: 130px; }
-        }
+        @media (min-width: 768px) { .board { --cell-size: 130px; } }
     </style>
 </head>
 <body>
-    <div class="particles" id="particles"></div>
+    <div class="embers" id="embers"></div>
     <div class="container">
-        <h1>Tic Tac Toe</h1>
+        <div class="banner">
+            <h1>Royal Duel</h1>
+            <div class="subtitle">A Medieval Battle of Wits</div>
+        </div>
+        <div class="divider"></div>
 
-        <div class="settings">
-            <div class="color-pick">
-                <label>X:</label>
-                <input type="color" id="xColor" value="#e94560">
+        <div class="controls" id="controlsPanel">
+            <div class="control-row">
+                <div class="color-pick">
+                    <label>Sword:</label>
+                    <input type="color" id="xColor" value="#e94560">
+                </div>
+                <div class="toggle-group" id="modeToggle">
+                    <button class="toggle-btn active" onclick="setMode('ai')">vs Dragon</button>
+                    <button class="toggle-btn" onclick="setMode('online')">Online Duel</button>
+                </div>
+                <div class="color-pick">
+                    <label>Shield:</label>
+                    <input type="color" id="oColor" value="#4da6ff">
+                </div>
             </div>
-            <div class="mode-toggle">
-                <button class="mode-btn active" onclick="setMode('ai')">vs AI</button>
-                <button class="mode-btn" onclick="setMode('pvp')">2 Player</button>
+            <div class="control-row" id="aiControls">
+                <div class="toggle-group" id="difficultyPanel">
+                    <button class="toggle-btn" onclick="setDifficulty('easy')">Squire</button>
+                    <button class="toggle-btn active" onclick="setDifficulty('medium')">Knight</button>
+                    <button class="toggle-btn" onclick="setDifficulty('hard')">King</button>
+                </div>
             </div>
-            <div class="color-pick">
-                <label>O:</label>
-                <input type="color" id="oColor" value="#0ea5e9">
+            <div class="control-row" id="aiControls2">
+                <div class="toggle-group" id="sidePanel">
+                    <button class="toggle-btn active" onclick="setSide('X')">Wield Sword</button>
+                    <button class="toggle-btn" onclick="setSide('O')">Bear Shield</button>
+                </div>
+                <div class="toggle-group" id="firstPanel">
+                    <button class="toggle-btn active" onclick="setFirstMove('human')">You First</button>
+                    <button class="toggle-btn" onclick="setFirstMove('ai')">Dragon First</button>
+                </div>
             </div>
         </div>
 
-        <div class="difficulty" id="difficultyPanel">
-            <button class="diff-btn" onclick="setDifficulty('easy')">Easy</button>
-            <button class="diff-btn active" onclick="setDifficulty('medium')">Medium</button>
-            <button class="diff-btn" onclick="setDifficulty('hard')">Hard</button>
+        <!-- Online Duel Panel -->
+        <div class="online-panel" id="onlinePanel">
+            <div class="label">Summon an Ally for Battle</div>
+            <div class="divider" style="width:60%;"></div>
+            <div id="onlineStatus">
+                <button class="online-btn" onclick="createRoom()" id="createBtn">Create Battle Room</button>
+                <div style="margin:8px 0; color:#6b5a40; font-size:0.75rem;">- or -</div>
+                <div style="display:flex; gap:8px; align-items:center; justify-content:center;">
+                    <input type="text" id="joinCode" placeholder="Enter room code" maxlength="6" style="width:160px;">
+                    <button class="online-btn" onclick="joinRoom()" id="joinBtn">Join</button>
+                </div>
+            </div>
+            <div id="onlineConnected" style="display:none;">
+                <div class="connected-badge">Allied Knight Connected</div>
+                <div class="hint" style="margin-top:6px;" id="onlineRole"></div>
+            </div>
         </div>
 
-        <div class="mode-toggle" id="sidePanel">
-            <button class="mode-btn active" onclick="setSide('X')">Play as X</button>
-            <button class="mode-btn" onclick="setSide('O')">Play as O</button>
+        <div class="scoreboard">
+            <div class="player-score">
+                <span class="score-icon">&#9876;</span>
+                <span class="score-val" id="xScore">0</span>
+            </div>
+            <div class="player-score">
+                <span class="score-icon">&#9878;</span>
+                <span class="score-val" id="draws" style="color:#8b7355;">0</span>
+            </div>
+            <div class="player-score">
+                <span class="score-icon">&#9781;</span>
+                <span class="score-val" id="oScore">0</span>
+            </div>
         </div>
 
-        <div class="score">
-            <div>X: <span id="xScore">0</span></div>
-            <div>Draws: <span id="draws">0</span></div>
-            <div>O: <span id="oScore">0</span></div>
-        </div>
+        <div class="status" id="status">Draw thy sword, warrior</div>
 
-        <div class="status" id="status">Your turn (X)</div>
-
-        <div class="board-wrapper">
+        <div class="board-wrapper" id="boardWrapper">
             <div class="board" id="board"></div>
         </div>
 
-        <button class="btn" onclick="resetGame()">New Game</button>
+        <button class="btn" onclick="newGame()">New Battle</button>
     </div>
 
     <script>
-        // --- Audio (Web Audio API - no files needed) ---
+        // --- Audio ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
         function playSound(type) {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            gain.gain.value = 0.15;
-
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const t = audioCtx.currentTime;
             if (type === 'place') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.1);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.15);
-            } else if (type === 'win') {
-                osc.type = 'square';
-                const t = audioCtx.currentTime;
-                osc.frequency.setValueAtTime(523, t);
-                osc.frequency.setValueAtTime(659, t + 0.15);
-                osc.frequency.setValueAtTime(784, t + 0.3);
-                osc.frequency.setValueAtTime(1047, t + 0.45);
+                const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(800, t);
+                osc.frequency.exponentialRampToValueAtTime(200, t + 0.15);
                 gain.gain.setValueAtTime(0.12, t);
-                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.7);
-                osc.start(); osc.stop(t + 0.7);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+                osc.start(t); osc.stop(t + 0.2);
+                const osc2 = audioCtx.createOscillator(), g2 = audioCtx.createGain();
+                osc2.connect(g2); g2.connect(audioCtx.destination);
+                osc2.type = 'square'; osc2.frequency.setValueAtTime(150, t);
+                g2.gain.setValueAtTime(0.06, t);
+                g2.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+                osc2.start(t); osc2.stop(t + 0.08);
+            } else if (type === 'win') {
+                [392, 523, 659, 784, 1047].forEach((freq, i) => {
+                    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(freq, t + i * 0.12);
+                    gain.gain.setValueAtTime(0.08, t + i * 0.12);
+                    gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.12 + 0.25);
+                    osc.start(t + i * 0.12); osc.stop(t + i * 0.12 + 0.25);
+                });
             } else if (type === 'draw') {
-                osc.type = 'triangle';
-                const t = audioCtx.currentTime;
-                osc.frequency.setValueAtTime(400, t);
-                osc.frequency.exponentialRampToValueAtTime(200, t + 0.4);
-                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
-                osc.start(); osc.stop(t + 0.4);
-            } else if (type === 'hover') {
+                const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-                gain.gain.value = 0.03;
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.08);
+                osc.frequency.setValueAtTime(150, t);
+                osc.frequency.exponentialRampToValueAtTime(60, t + 0.5);
+                gain.gain.setValueAtTime(0.15, t);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+                osc.start(t); osc.stop(t + 0.5);
+            } else if (type === 'hover') {
+                const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.type = 'sine'; osc.frequency.setValueAtTime(300, t);
+                gain.gain.setValueAtTime(0.02, t);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+                osc.start(t); osc.stop(t + 0.06);
             }
         }
 
@@ -392,7 +402,16 @@
         let aiThinking = false;
         let humanSide = 'X';
         let aiSide = 'O';
+        let firstMove = 'human';
+        let aiTimer = null;
 
+        // Online state
+        let peer = null;
+        let conn = null;
+        let onlineSide = null;   // 'X' or 'O' for this player
+        let isOnlineHost = false;
+
+        const SYMBOLS = { X: '\u2694', O: '\u2764' };
         const winCombos = [
             [0,1,2],[3,4,5],[6,7,8],
             [0,3,6],[1,4,7],[2,5,8],
@@ -402,74 +421,198 @@
         // --- Colors ---
         const xColorInput = document.getElementById('xColor');
         const oColorInput = document.getElementById('oColor');
-
         function getXColor() { return xColorInput.value; }
         function getOColor() { return oColorInput.value; }
-
         xColorInput.addEventListener('input', () => { render(); updateScoreColors(); });
         oColorInput.addEventListener('input', () => { render(); updateScoreColors(); });
-
         function updateScoreColors() {
             document.getElementById('xScore').style.color = getXColor();
             document.getElementById('oScore').style.color = getOColor();
         }
 
-        // --- Mode & Difficulty ---
+        // --- Mode ---
         function setMode(m) {
+            // Cleanup online if switching away
+            if (mode === 'online' && m !== 'online') { cleanupOnline(); }
+
             mode = m;
-            document.querySelectorAll('.mode-toggle .mode-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector(`.mode-toggle .mode-btn[onclick="setMode('${m}')"]`).classList.add('active');
-            document.getElementById('difficultyPanel').style.display = m === 'ai' ? 'flex' : 'none';
-            document.getElementById('sidePanel').style.display = m === 'ai' ? 'flex' : 'none';
+            document.querySelectorAll('#modeToggle .toggle-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`#modeToggle .toggle-btn[onclick="setMode('${m}')"]`).classList.add('active');
+
+            const isAi = m === 'ai';
+            const isOnline = m === 'online';
+            document.getElementById('aiControls').style.display = isAi ? 'flex' : 'none';
+            document.getElementById('aiControls2').style.display = isAi ? 'flex' : 'none';
+            document.getElementById('onlinePanel').classList.toggle('show', isOnline);
+
+            if (isOnline) {
+                document.getElementById('onlineStatus').style.display = '';
+                document.getElementById('onlineConnected').style.display = 'none';
+            }
             resetGame();
         }
 
         function setSide(s) {
-            humanSide = s;
-            aiSide = s === 'X' ? 'O' : 'X';
-            document.querySelectorAll('#sidePanel .mode-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector(`#sidePanel .mode-btn[onclick="setSide('${s}')"]`).classList.add('active');
+            humanSide = s; aiSide = s === 'X' ? 'O' : 'X';
+            document.querySelectorAll('#sidePanel .toggle-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`#sidePanel .toggle-btn[onclick="setSide('${s}')"]`).classList.add('active');
             resetGame();
         }
-
+        function setFirstMove(who) {
+            firstMove = who;
+            document.querySelectorAll('#firstPanel .toggle-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`#firstPanel .toggle-btn[onclick="setFirstMove('${who}')"]`).classList.add('active');
+            resetGame();
+        }
         function setDifficulty(d) {
             difficulty = d;
-            document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector(`.diff-btn[onclick="setDifficulty('${d}')"]`).classList.add('active');
+            document.querySelectorAll('#difficultyPanel .toggle-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`#difficultyPanel .toggle-btn[onclick="setDifficulty('${d}')"]`).classList.add('active');
             resetGame();
         }
 
-        // --- Particles ---
-        function createParticles() {
-            const container = document.getElementById('particles');
-            for (let i = 0; i < 30; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                const size = Math.random() * 6 + 2;
-                p.style.width = size + 'px';
-                p.style.height = size + 'px';
-                p.style.left = Math.random() * 100 + '%';
-                p.style.background = Math.random() > 0.5 ? '#e94560' : '#0ea5e9';
-                p.style.animationDuration = (Math.random() * 15 + 10) + 's';
-                p.style.animationDelay = (Math.random() * 10) + 's';
-                container.appendChild(p);
+        // --- Online Multiplayer (PeerJS) ---
+        function generateCode() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let code = '';
+            for (let i = 0; i < 5; i++) code += chars[Math.floor(Math.random() * chars.length)];
+            return code;
+        }
+
+        function createRoom() {
+            const code = generateCode();
+            document.getElementById('createBtn').disabled = true;
+            document.getElementById('createBtn').textContent = 'Summoning...';
+
+            peer = new Peer('royalduel-' + code);
+            peer.on('open', () => {
+                isOnlineHost = true;
+                onlineSide = 'X';
+                document.getElementById('onlineStatus').innerHTML = `
+                    <div class="label">Thy Battle Code:</div>
+                    <div class="code-display" onclick="navigator.clipboard.writeText('${code}')" title="Click to copy">${code}</div>
+                    <div class="hint">Share this code with thy ally. Click to copy.</div>
+                    <div class="hint" style="margin-top:8px; color:#f0c65a;">Awaiting challenger...</div>
+                `;
+            });
+            peer.on('connection', (c) => {
+                conn = c;
+                setupConnection();
+            });
+            peer.on('error', (err) => {
+                document.getElementById('createBtn').disabled = false;
+                document.getElementById('createBtn').textContent = 'Create Battle Room';
+                statusEl.textContent = 'Summoning failed. Try again.';
+            });
+        }
+
+        function joinRoom() {
+            const code = document.getElementById('joinCode').value.trim().toUpperCase();
+            if (!code) return;
+            document.getElementById('joinBtn').disabled = true;
+            document.getElementById('joinBtn').textContent = 'Joining...';
+
+            peer = new Peer();
+            peer.on('open', () => {
+                isOnlineHost = false;
+                onlineSide = 'O';
+                conn = peer.connect('royalduel-' + code);
+                conn.on('open', () => { setupConnection(); });
+                conn.on('error', () => {
+                    statusEl.textContent = 'Could not find that battle room.';
+                    document.getElementById('joinBtn').disabled = false;
+                    document.getElementById('joinBtn').textContent = 'Join';
+                });
+            });
+            peer.on('error', () => {
+                statusEl.textContent = 'Connection failed. Check the code.';
+                document.getElementById('joinBtn').disabled = false;
+                document.getElementById('joinBtn').textContent = 'Join';
+            });
+        }
+
+        function setupConnection() {
+            document.getElementById('onlineStatus').style.display = 'none';
+            document.getElementById('onlineConnected').style.display = '';
+            document.getElementById('onlineRole').textContent =
+                `Thou art ${onlineSide === 'X' ? 'Sword (X) - First move' : 'Shield (O) - Second move'}`;
+
+            conn.on('data', (data) => {
+                if (data.type === 'move') {
+                    cells[data.index] = data.player;
+                    currentPlayer = data.player;
+                    playSound('place');
+                    afterMove(data.index);
+                } else if (data.type === 'reset') {
+                    cells = Array(9).fill('');
+                    currentPlayer = 'X';
+                    gameOver = false;
+                    updateOnlineStatus();
+                    render();
+                }
+            });
+            conn.on('close', () => {
+                statusEl.textContent = 'Thy ally has departed.';
+                statusEl.style.color = '#8b4513';
+            });
+
+            cells = Array(9).fill('');
+            currentPlayer = 'X';
+            gameOver = false;
+            updateOnlineStatus();
+            render();
+        }
+
+        function cleanupOnline() {
+            if (conn) { conn.close(); conn = null; }
+            if (peer) { peer.destroy(); peer = null; }
+            onlineSide = null;
+            isOnlineHost = false;
+        }
+
+        function updateOnlineStatus() {
+            if (mode !== 'online' || !conn) return;
+            if (currentPlayer === onlineSide) {
+                statusEl.textContent = 'Thy turn, warrior!';
+                statusEl.style.color = '#f0c65a';
+            } else {
+                statusEl.textContent = 'Thy rival ponders...';
+                statusEl.style.color = '#8b7355';
             }
         }
-        createParticles();
 
-        // --- Confetti ---
+        // --- Embers ---
+        function createEmbers() {
+            const container = document.getElementById('embers');
+            for (let i = 0; i < 25; i++) {
+                const e = document.createElement('div');
+                e.className = 'ember';
+                const size = Math.random() * 4 + 2;
+                e.style.width = size + 'px'; e.style.height = size + 'px';
+                e.style.left = Math.random() * 100 + '%';
+                const colors = ['#ff6b35', '#f0c65a', '#ff4500', '#ff8c00', '#e25822'];
+                e.style.background = colors[Math.floor(Math.random() * colors.length)];
+                e.style.boxShadow = `0 0 ${size + 2}px ${e.style.background}`;
+                e.style.animationDuration = (Math.random() * 12 + 8) + 's';
+                e.style.animationDelay = (Math.random() * 8) + 's';
+                container.appendChild(e);
+            }
+        }
+        createEmbers();
+
         function spawnConfetti() {
-            const colors = [getXColor(), getOColor(), '#ffd700', '#ff6b6b', '#48dbfb', '#ff9ff3', '#54a0ff'];
-            for (let i = 0; i < 60; i++) {
+            const colors = ['#f0c65a', '#c0c0c0', '#8b6914', getXColor(), getOColor(), '#d4a558', '#fff'];
+            const shapes = ['\u2726', '\u2605', '\u2736', '\u272A', '\u2738'];
+            for (let i = 0; i < 50; i++) {
                 const c = document.createElement('div');
                 c.className = 'confetti';
+                c.textContent = shapes[Math.floor(Math.random() * shapes.length)];
                 c.style.left = Math.random() * 100 + '%';
-                c.style.background = colors[Math.floor(Math.random() * colors.length)];
-                c.style.width = (Math.random() * 10 + 5) + 'px';
-                c.style.height = (Math.random() * 10 + 5) + 'px';
-                c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                c.style.color = colors[Math.floor(Math.random() * colors.length)];
+                c.style.fontSize = (Math.random() * 16 + 10) + 'px';
                 c.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
                 c.style.animationDelay = (Math.random() * 0.5) + 's';
+                c.style.textShadow = `0 0 6px ${c.style.color}`;
                 document.body.appendChild(c);
                 setTimeout(() => c.remove(), 4000);
             }
@@ -484,32 +627,34 @@
                 if (val) {
                     const mark = document.createElement('span');
                     mark.className = 'mark';
-                    mark.textContent = val;
-                    mark.style.color = val === 'X' ? getXColor() : getOColor();
-                    mark.style.textShadow = `0 0 20px ${val === 'X' ? getXColor() : getOColor()}`;
+                    mark.textContent = SYMBOLS[val];
+                    const color = val === 'X' ? getXColor() : getOColor();
+                    mark.style.color = color;
+                    mark.style.setProperty('--mark-color', color);
+                    mark.style.textShadow = `0 0 15px ${color}, 0 0 30px ${color}`;
                     cell.appendChild(mark);
                 }
-                if (gameOver || aiThinking) cell.classList.add('disabled');
+                const disabled = gameOver || aiThinking ||
+                    (mode === 'online' && currentPlayer !== onlineSide);
+                if (disabled) cell.classList.add('disabled');
 
                 cell.addEventListener('mousemove', e => {
                     const rect = cell.getBoundingClientRect();
                     cell.style.setProperty('--mx', ((e.clientX - rect.left) / rect.width * 100) + '%');
                     cell.style.setProperty('--my', ((e.clientY - rect.top) / rect.height * 100) + '%');
                 });
-                cell.addEventListener('mouseenter', () => { if (!val && !gameOver && !aiThinking) playSound('hover'); });
+                cell.addEventListener('mouseenter', () => { if (!val && !disabled) playSound('hover'); });
                 cell.addEventListener('click', () => makeMove(i));
                 boardEl.appendChild(cell);
             });
             updateScoreColors();
         }
 
-        // --- Ripple ---
         function createRipple(cellEl, color) {
             const size = cellEl.offsetWidth * 0.5;
             const ripple = document.createElement('div');
             ripple.className = 'ripple';
-            ripple.style.width = size + 'px';
-            ripple.style.height = size + 'px';
+            ripple.style.width = size + 'px'; ripple.style.height = size + 'px';
             ripple.style.left = (cellEl.offsetWidth / 2 - size / 2) + 'px';
             ripple.style.top = (cellEl.offsetHeight / 2 - size / 2) + 'px';
             ripple.style.background = color;
@@ -520,12 +665,22 @@
         // --- Move ---
         function makeMove(i) {
             if (cells[i] || gameOver || aiThinking) return;
+            if (mode === 'online' && currentPlayer !== onlineSide) return;
             if (audioCtx.state === 'suspended') audioCtx.resume();
 
             cells[i] = currentPlayer;
             playSound('place');
-            render();
 
+            // Send move to peer
+            if (mode === 'online' && conn) {
+                conn.send({ type: 'move', index: i, player: currentPlayer });
+            }
+
+            afterMove(i);
+        }
+
+        function afterMove(i) {
+            render();
             const cellEl = boardEl.children[i];
             createRipple(cellEl, currentPlayer === 'X' ? getXColor() : getOColor());
 
@@ -533,9 +688,14 @@
             if (winner) {
                 gameOver = true;
                 playSound('win');
-                const label = (mode === 'ai' && winner === humanSide) ? 'You win!' :
-                              (mode === 'ai' && winner === aiSide) ? 'AI wins!' :
-                              `${winner} wins!`;
+                let label;
+                if (mode === 'ai') {
+                    label = winner === humanSide ? 'Victory is thine!' : 'The Dragon prevails!';
+                } else if (mode === 'online') {
+                    label = winner === onlineSide ? 'Victory is thine!' : 'Thy rival conquers!';
+                } else {
+                    label = `${SYMBOLS[winner]} triumphs!`;
+                }
                 statusEl.textContent = label;
                 statusEl.style.color = winner === 'X' ? getXColor() : getOColor();
                 scores[winner]++;
@@ -549,53 +709,89 @@
             if (cells.every(c => c)) {
                 gameOver = true;
                 playSound('draw');
-                statusEl.textContent = "It's a draw!";
-                statusEl.style.color = '#ffd700';
+                statusEl.textContent = 'A stalemate! Honor preserved.';
+                statusEl.style.color = '#8b7355';
                 scores.draws++;
                 updateScores();
-                document.querySelector('.board-wrapper').classList.add('draw-shake');
-                setTimeout(() => document.querySelector('.board-wrapper').classList.remove('draw-shake'), 600);
+                document.getElementById('boardWrapper').classList.add('draw-shake');
+                setTimeout(() => document.getElementById('boardWrapper').classList.remove('draw-shake'), 600);
                 return;
             }
 
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            updateStatus();
 
-            if (mode === 'ai' && currentPlayer === aiSide && !gameOver) {
-                aiThinking = true;
+            if (mode === 'online') {
+                updateOnlineStatus();
                 render();
-                const delay = Math.floor(Math.random() * 1000) + 2000;
-                setTimeout(() => {
-                    aiThinking = false;
-                    aiMove();
-                }, delay);
+            } else {
+                updateStatus();
+                if (mode === 'ai' && currentPlayer === aiSide && !gameOver) {
+                    scheduleAiMove();
+                }
             }
         }
 
         function updateStatus() {
             if (mode === 'ai') {
-                statusEl.textContent = currentPlayer === humanSide ? `Your turn (${humanSide})` : 'AI thinking...';
+                if (aiThinking) {
+                    statusEl.textContent = 'The Dragon ponders...';
+                    statusEl.style.color = '#8b7355';
+                } else {
+                    statusEl.textContent = 'Draw thy sword, warrior';
+                    statusEl.style.color = '#f0c65a';
+                }
             } else {
-                statusEl.textContent = `${currentPlayer}'s turn`;
+                const symbol = SYMBOLS[currentPlayer];
+                statusEl.textContent = `${symbol} awaits thy move`;
+                statusEl.style.color = currentPlayer === 'X' ? getXColor() : getOColor();
             }
-            statusEl.style.color = currentPlayer === 'X' ? getXColor() : getOColor();
         }
 
-        // --- AI ---
+        // =================== SMARTER AI ===================
+
         function aiMove() {
             let move;
             if (difficulty === 'easy') {
-                move = aiEasy();
+                // 30% smart, 70% random — but always take a win
+                const winMove = findWinOrBlock(aiSide);
+                if (winMove !== null) { move = winMove; }
+                else { move = Math.random() < 0.3 ? aiBest() : aiEasy(); }
             } else if (difficulty === 'medium') {
-                move = Math.random() < 0.6 ? aiBest() : aiEasy();
+                // Always win if possible, always block if opponent about to win
+                // Otherwise 85% minimax, 15% random
+                const winMove = findWinOrBlock(aiSide);
+                const blockMove = findWinOrBlock(humanSide);
+                if (winMove !== null) { move = winMove; }
+                else if (blockMove !== null) { move = blockMove; }
+                else { move = Math.random() < 0.85 ? aiBest() : aiEasy(); }
             } else {
+                // King: pure minimax — unbeatable
                 move = aiBest();
             }
-            if (move !== undefined) makeMove(move);
+            if (move !== undefined && move !== null) makeMove(move);
+        }
+
+        // Check if 'side' can win in one move, return that cell index
+        function findWinOrBlock(side) {
+            for (const [a, b, c] of winCombos) {
+                const vals = [cells[a], cells[b], cells[c]];
+                const sideCount = vals.filter(v => v === side).length;
+                const emptyCount = vals.filter(v => v === '').length;
+                if (sideCount === 2 && emptyCount === 1) {
+                    if (cells[a] === '') return a;
+                    if (cells[b] === '') return b;
+                    if (cells[c] === '') return c;
+                }
+            }
+            return null;
         }
 
         function aiEasy() {
             const empty = cells.map((v, i) => v === '' ? i : -1).filter(i => i >= 0);
+            // Prefer center, then corners, then edges
+            if (cells[4] === '') return 4;
+            const corners = [0, 2, 6, 8].filter(i => cells[i] === '');
+            if (corners.length > 0) return corners[Math.floor(Math.random() * corners.length)];
             return empty[Math.floor(Math.random() * empty.length)];
         }
 
@@ -617,7 +813,6 @@
             if (winner === aiSide) return 10 - depth;
             if (winner === humanSide) return depth - 10;
             if (board.every(c => c)) return 0;
-
             if (isMaximizing) {
                 let best = -Infinity;
                 for (let i = 0; i < 9; i++) {
@@ -666,23 +861,51 @@
         }
 
         function resetGame() {
+            if (aiTimer) { clearTimeout(aiTimer); aiTimer = null; }
             cells = Array(9).fill('');
             currentPlayer = 'X';
             gameOver = false;
             aiThinking = false;
+
+            if (mode === 'online') {
+                if (conn) { conn.send({ type: 'reset' }); }
+                updateOnlineStatus();
+                render();
+                return;
+            }
+
+            if (mode === 'ai' && firstMove === 'ai') {
+                currentPlayer = aiSide;
+                updateStatus();
+                render();
+                scheduleAiMove();
+            } else if (mode === 'ai' && firstMove === 'human') {
+                currentPlayer = humanSide;
+                updateStatus();
+                render();
+            } else {
+                updateStatus();
+                render();
+            }
+        }
+
+        function newGame() {
+            firstMove = 'human';
+            document.querySelectorAll('#firstPanel .toggle-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`#firstPanel .toggle-btn[onclick="setFirstMove('human')"]`).classList.add('active');
+            resetGame();
+        }
+
+        function scheduleAiMove() {
+            aiThinking = true;
             updateStatus();
             render();
-
-            // If human plays O, AI goes first as X
-            if (mode === 'ai' && humanSide === 'O') {
-                aiThinking = true;
-                render();
-                const delay = Math.floor(Math.random() * 1000) + 2000;
-                setTimeout(() => {
-                    aiThinking = false;
-                    aiMove();
-                }, delay);
-            }
+            const delay = Math.floor(Math.random() * 1000) + 2000;
+            aiTimer = setTimeout(() => {
+                aiTimer = null;
+                aiThinking = false;
+                aiMove();
+            }, delay);
         }
 
         render();
